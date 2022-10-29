@@ -4,6 +4,9 @@ class Solution:
         res = 0
         
         while n:
-            n &= n - 1
-            res += 1
+            ''''n &= n - 1
+            res += 1'''
+            if n % 2 ==1:
+                res += 1
+            n = n >> 1
         return res
