@@ -9,8 +9,8 @@ class Solution:
             if i =="": # ignore spaces in string
                 continue
             if i.isdigit():
-                num = num * 10 + int(i)  # as string could be "0+123" this 123 will be append to the stack together.
-            if i in "+-*/" or e==len(s)-1: # this e==len(s)-1 is because last char in string will be a number and we have to append it too.
+                num = num * 10 + int(i)  
+            if i in "+-*/" or e==len(s)-1: 
                 if op =='-':
                     stack.append(-num)
                 elif op=='+':
@@ -21,5 +21,4 @@ class Solution:
                     stack.append(int(stack.pop()/num))
                 op=i
                 num=0
-        #print(stack)
         return sum(stack)
