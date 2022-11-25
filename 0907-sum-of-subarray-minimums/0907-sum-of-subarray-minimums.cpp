@@ -1,29 +1,62 @@
-class Solution:
-    def sumSubarrayMins(self, arr: List[int]) -> int:
-        MOD = 10 ** 9 + 7
+class Solution {
+public:
 
-        # monotonic increasing stack
-        stack = []
+    int sumSubarrayMins(vector<int>& A) {
 
-        # make a dp array of the same size as the input array
-        dp = [0] * len(arr)
+        int n = A.size();
+        int MOD = 1e9 + 7;
+        vector<int> left(n), right(n);
 
-        # populate monotonically increasing stack
-        for i in range(len(arr)):
-            # before pushing an element, make sure all
-            # larger and equal elements in the stack are
-            # removed
-            while stack and arr[stack[-1]] >= arr[i]:
-                stack.pop()
+        // Left Stack
+        stack<int>Left_st;
+        Left_st.push(0);
 
-            # calculate the sum of minimums of all subarrays
-            # ending at index i
-            if stack:
-                previousSmaller = stack[-1]
-                dp[i] = dp[previousSmaller] + (i - previousSmaller) * arr[i]
-            else:
-                dp[i] = (i + 1) * arr[i]
-            stack.append(i)
+        left[0] = 1; // distance = 1
 
-        # add all the elements of dp to get the answer
-        return sum(dp) % MOD
+        for(int i=1; i<n; i++)
+        {
+            while(!Left_st.empty() && A[i] < A[Left_st.top()])
+                Left_st.pop();
+
+            if(Left_st.empty())
+                left[i] = i+1; // total distance if less element not found = i+1
+            else
+                left[i] = i - Left_st.top(); // distance = i-Left_st.top()
+
+            Left_st.push(i);
+
+        }
+
+        // Right Stack
+          stack<int>Right_st;
+        Right_st.push(n-1);
+
+        right[n-1] = 1;
+
+        for(int i=n-2; i>=0; i--)
+        {
+            while(!Right_st.empty() && A[i] <= A[Right_st.top()])
+                Right_st.pop();
+
+            if(Right_st.empty())
+                right[i] = n-i; // distance
+            else
+                right[i] = Right_st.top()-i;
+
+            Right_st.push(i);
+        }
+
+        // for each value we have left and right contribution will be (Left * Right) * Element
+
+       long long int res = 0;
+        for(int i=0; i<n; i++)
+        {
+            long long prod = (left[i]*right[i])%MOD;
+            long long net = A[i] * prod;
+            res = (res + net)%MOD;
+        }
+
+        return res%MOD;
+    }
+
+};
