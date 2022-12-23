@@ -6,6 +6,8 @@ class Solution:
         mapPS, mapSP = {}, {}
         if len(s)!=len(pattern):
             return False
+        k = zip(pattern, s)
+        print(k)
         
         for c1, c2 in zip(pattern, s):
             if ((c1 in mapPS and mapPS[c1] != c2) or
